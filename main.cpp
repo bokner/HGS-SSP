@@ -34,14 +34,15 @@ int main(int argc, char* argv[]) {
         CommandLine commandLine(argc, argv);
         if (!commandLine.isValid())
             throw string(
-                    "(ERROR) Wrong command line. Format: [instance_path] [instance_names(-)] [solution_path] [seed] [population_size] [max_population_size] [number_elite] [number_close_individuals] [max_diversify]");
+                    "(ERROR) Wrong command line. Format: [instance_path] [solution_path] [seed] [population_size] [max_population_size] [number_elite] [number_close_individuals] [max_diversify]");
         nb_ticks_allowed = commandLine.getCpuTime() * CLOCKS_PER_SEC;
         parameters = new Parameters(commandLine.getSeed(), commandLine.getInstancesPaths(), commandLine.getInstancesNames(),
                             commandLine.getSolutionPath(), commandLine.getPopulationSize(), commandLine.getMaxPopulationSize(),
                             commandLine.getNumberElite(), commandLine.getNumberCloseIndividuals(), commandLine.getMaxDiversify());
 //        runs = commandLine.getRuns();
 
-        cout << "Starting " << commandLine.getInstancesPaths() << "/" << commandLine.getInstancesNames() <<  endl;
+        string instanceFile = commandLine.getInstancesPaths();
+        cout << "Starting " << instanceFile <<  endl;
         cout << endl;
 
         double cost, totalAvgCost = 0, totalBestCost = 0;
@@ -50,21 +51,9 @@ int main(int argc, char* argv[]) {
 
         ofstream outputFile;
 
-        // Run algorithm for every file in the set of instances
-        for (const string &item : parameters->files) {
-//            const clock_t totalStartTime = clock();
-//            bestCost = numeric_limits<double>::infinity();
-//            averageCost = 0;
-//            averageTime = 0;
-//            parameters->improvesPrimary = 0;
-//            parameters->improvesSecondary = 0;
-
-            // Run the algorithm on the same file a number of 'runs' times
-            // to generate average results
-//            for (unsigned int i = 0; i < runs; i++) {
                 const clock_t startTime = clock();
                 parameters->terminate = false;
-                parameters->readFile(item);
+                parameters->readFile(instanceFile);
 
                 parameters->setAuxiliaryParams();
 
@@ -82,7 +71,7 @@ int main(int argc, char* argv[]) {
 
                 // Write result to solution file
                 outputFile.open(parameters->solutionPath, ofstream::out | ofstream::app);
-                outputFile << item << endl;
+                //outputFile << instanceFile << endl;
                 outputFile << cost << ","  << totalTime << endl;
 
                 for (auto const& c : chromosome)
@@ -90,37 +79,6 @@ int main(int argc, char* argv[]) {
                 outputFile << endl;
                 outputFile.close();
 
-//                averageCost += cost;
-//                if (cost < bestCost) {
-//                    bestCost = cost;
-//                }
-//            }
-//            averageCost /= runs;
-//            averageTime /= runs;
-
-//            totalAvgCost += averageCost;
-//            totalBestCost += bestCost;
-//            totalTime += averageTime;
-
-//            parameters->improvesPrimary /= runs;
-//            parameters->improvesSecondary /= runs;
-
-//            totalImprovPrim += parameters->improvesPrimary;
-//            totalImprovSec += parameters->improvesSecondary;
-
-        }
-
-//        totalAvgCost /= parameters->files.size();
-//        totalBestCost /= parameters->files.size();
-//        totalTime /= parameters->files.size();
-
-//        totalImprovPrim /= parameters->files.size();
-//        totalImprovSec /= parameters->files.size();
-
-        // Write average result to solution file
-//        outputFile.open(parameters->solutionPath, ofstream::out | ofstream::app);
-//        outputFile << totalBestCost << "," << totalAvgCost << ","  << totalTime << endl;
-//        outputFile.close();
 
         delete parameters;
 
