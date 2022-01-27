@@ -100,15 +100,15 @@ void Parameters::readFile(const string &file) {
     if (inFile.good()) {
         string sLine;
         getline(inFile, sLine);
-        if (file.find("Yanasse") != string::npos) {
-            istringstream iss(sLine);
-            vector<string> tokens{(istream_iterator<string>(iss)), istream_iterator<string>() };
+        istringstream iss(sLine);
+        vector<string> tokens{(istream_iterator<string>(iss)), istream_iterator<string>() };
+        if (tokens.size() == 3) {
             numJobs = (unsigned int)stoi(tokens[0]);
             numTools = (unsigned int)stoi(tokens[1]);
             maxCapacity = (unsigned int)stoi(tokens[2]);
         }
         else {
-            numJobs = (unsigned int)stoi(sLine);
+            numJobs = (unsigned int)stoi(tokens[0]);
             getline(inFile, sLine);
             numTools = (unsigned int)stoi(sLine);
             getline(inFile, sLine);

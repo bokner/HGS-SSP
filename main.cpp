@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 
                 // Write result to solution file
                 outputFile.open(parameters->solutionPath, ofstream::out | ofstream::app);
-                //outputFile << instanceFile << endl;
+                outputFile << instanceFile << endl;
                 outputFile << cost << ","  << totalTime << endl;
 
                 for (auto const& c : chromosome)
