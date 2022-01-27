@@ -13,6 +13,7 @@
 #include "Parameters.h"
 #include "Population.h"
 #include "Genetic.h"
+#include <algorithm>
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -75,12 +76,18 @@ int main(int argc, char* argv[]) {
                 solver.evolve(min(parameters->numJobs * 20, 1000));
 
                 cost = population->getBestIndividual()->solutionCost.evaluation;
+                vector<unsigned int> chromosome = population->getBestIndividual()->chromosome;
                 totalTime = (float(clock() - startTime) / CLOCKS_PER_SEC);
                 delete population;
 
                 // Write result to solution file
                 outputFile.open(parameters->solutionPath, ofstream::out | ofstream::app);
+                outputFile << item << endl;
                 outputFile << cost << ","  << totalTime << endl;
+
+                for (auto const& c : chromosome)
+                        outputFile << c << ' ';
+                outputFile << endl;
                 outputFile.close();
 
 //                averageCost += cost;
