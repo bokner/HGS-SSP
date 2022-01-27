@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
                 outputFile << cost << ","  << totalTime << endl;
 
                 for (auto const& c : chromosome)
-                        outputFile << c << ' ';
+                        outputFile << c + 1 << ' ';
                 outputFile << endl;
                 outputFile.close();
 
